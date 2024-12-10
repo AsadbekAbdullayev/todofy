@@ -1,0 +1,11 @@
+.main {
+  width: 100%;
+  min-height: 100vh;
+  background-image: url("https://krabochki.github.io/Angular-Todo-app/todo-background-light.4a1c3632674f8edb.jpg");
+  background-position: center right;
+  background-attachment: fixed;
+  background-size: auto 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: 30px;
+}

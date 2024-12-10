@@ -1,0 +1,24 @@
+<div class="custom-card">
+  <div class="card-content">
+    <h2 class="card-title">
+      {{
+        title ||
+          "Lorem ipsum dolor sit amet consectetur adipisicing elit. Minima recusandae enim vitae eveniet voluptatum eligendi animi."
+      }}
+    </h2>
+    <p class="card-description">
+      {{
+        description ||
+          " Mollitia consectetur architecto quod nam. Ducimus autem quaerat veritatis sequi, cumque adipisci officia earum tenetur magnam vel quod temporibus consequuntur ipsa rerum et repellendus totam dolore sed voluptate qui consectetur, aut assumenda. Officia neque hic tempore dolorem nostrum reiciendis cupiditate error velit sit architecto id dolorum at totam sunt animi saepe assumenda, facilis esse deleniti impedit pariatur perferendis quibusdam. Eaque dicta illum a sequi praesentium exercitationem expedita maiores aperiam ad accusamus, dolores harum odio numquam natus, optio rerum cupiditate qui, modi illo quis pariatur."
+      }}
+    </p>
+  </div>
+  <div class="card-actions">
+    <button mat-icon-button color="primary" (click)="onEdit()">
+      <mat-icon>edit</mat-icon>
+    </button>
+    <button mat-icon-button color="warn" (click)="onDelete()">
+      <mat-icon>delete</mat-icon>
+    </button>
+  </div>
+</div>

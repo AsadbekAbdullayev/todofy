@@ -1,0 +1,33 @@
+.custom-card {
+  background-color: #ffedd726;
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  padding: 2em 3em;
+  margin: 1em 0;
+  border-radius: 0.7em;
+  align-items: center;
+  border: 4px solid transparent;
+  box-shadow: 0.1em 0.1em 1em #3a1b6f1a;
+  transition: 0.3s ease-in-out, border 0s;
+  width: 700px !important;
+}
+
+.card-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.card-title {
+  font-size: 1.5em;
+  margin: 0 0 0.5em 0;
+}
+
+.card-description {
+  font-size: 1em;
+  color: #555;
+}
+
+.card-actions {
+  display: flex;
+  gap: 1em;
+}
