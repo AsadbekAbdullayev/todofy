@@ -36,7 +36,6 @@ export class CardComponent {
 
   onDelete(id: string) {
     this.loading = true;
-
     this.apiService.deleteData(`books/${id}`).subscribe(
       (response) => {
         this.snackBar.open('Task deleted successfully', 'Close', {
