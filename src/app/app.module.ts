@@ -11,8 +11,19 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { ReactiveFormsModule } from '@angular/forms';
+import { ModalFormComponent } from './modal-form/modal-form.component';
+import { HttpClientModule } from '@angular/common/http';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 @NgModule({
-  declarations: [AppComponent, ToDoAppComponent, CardComponent],
+  declarations: [
+    AppComponent,
+    ToDoAppComponent,
+    CardComponent,
+    ModalFormComponent,
+  ],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -21,8 +32,12 @@ import { MatInputModule } from '@angular/material/input';
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
+    ReactiveFormsModule,
+    HttpClientModule,
+    MatProgressSpinnerModule,
+    BrowserAnimationsModule,
+    MatSnackBarModule,
   ],
-  providers: [],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
