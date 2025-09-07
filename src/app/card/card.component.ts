@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ModalFormComponent } from '../modal-form/modal-form.component';
 import { ApiService } from '../api.service';
@@ -8,75 +8,65 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   selector: 'app-card',
   templateUrl: './card.component.html',
   styleUrls: ['./card.component.css'],
-  standalone: false,
 })
 export class CardComponent {
-  @Input() title: string = '';
-  @Input() description: string = '';
+  @Input() title = '';
+  @Input() description = '';
   @Input() task: any;
-  @Output() edit = new EventEmitter<void>();
-  @Output() delete = new EventEmitter<void>();
   loading = false;
 
   constructor(
     private dialog: MatDialog,
-    public apiService: ApiService,
+    private apiService: ApiService,
     private snackBar: MatSnackBar
   ) {}
-  onEdit(data: any): void {
+
+  onEdit(task: any): void {
     this.dialog.open(ModalFormComponent, {
       data: {
-        title: data?.author,
-        description: data?.title,
-        id: data?._id,
-        publishYear: data?.publishYear,
+        title: task?.author,
+        description: task?.title,
+        id: task?._id,
+        publishYear: task?.publishYear,
       },
     });
   }
 
-  onDelete(id: string) {
+  onDelete(id: string): void {
     this.loading = true;
-    this.apiService.deleteData(`books/${id}`).subscribe(
-      (response) => {
-        this.snackBar.open('Task deleted successfully', 'Close', {
-          duration: 3000,
-          horizontalPosition: 'right',
-          verticalPosition: 'top',
-        });
+    this.apiService.deleteData(`books/${id}`).subscribe({
+      next: () => {
+        this.showSnack('Task deleted successfully');
         this.loading = false;
         this.getData();
       },
-      (error) => {
+      error: () => {
         this.loading = false;
-        this.snackBar.open(
-          'An error occurred while deleting the task.',
-          'Close',
-          {
-            duration: 3000,
-            horizontalPosition: 'right',
-            verticalPosition: 'top',
-          }
-        );
-      }
-    );
+        this.showSnack('An error occurred while deleting the task.');
+      },
+    });
   }
 
-  getData() {
+  private getData(): void {
     this.apiService.loading = true;
-    this.apiService.getData().subscribe(
-      (response) => {
+    this.apiService.getData().subscribe({
+      next: (response) => {
         this.apiService.task_data = response.data;
         this.apiService.loading = false;
       },
-      (error) => {
+      error: (error) => {
         this.apiService.loading = false;
-        this.snackBar.open('An error occurred. Please try again.', 'Close', {
-          duration: 3000,
-          horizontalPosition: 'right',
-          verticalPosition: 'top',
-        });
+        this.showSnack('An error occurred. Please try again.');
         console.error(error);
-      }
-    );
+      },
+    });
+  }
+
+  private showSnack(message: string): void {
+    this.snackBar.open(message, 'Close', {
+      duration: 3000,
+      horizontalPosition: 'right',
+      verticalPosition: 'top',
+    });
   }
 }
