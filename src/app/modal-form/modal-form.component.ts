@@ -7,14 +7,15 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 @Component({
   selector: 'app-modal-form',
   templateUrl: './modal-form.component.html',
-  standalone: false,
   styleUrls: ['./modal-form.component.css'],
+  standalone: false,
 })
 export class ModalFormComponent {
-  @Output() taskAdded = new EventEmitter<any>();
+  @Output() taskChanged = new EventEmitter<void>();
   form: FormGroup;
   loading = false;
   isEditMode = false;
+
   constructor(
     private snackBar: MatSnackBar,
     private fb: FormBuilder,
@@ -26,100 +27,59 @@ export class ModalFormComponent {
 
     this.form = this.fb.group({
       title: [data?.title || '', Validators.required],
-      description: [data?.description || '', [Validators.required]],
+      description: [data?.description || '', Validators.required],
     });
   }
 
-  getData() {
-    this.apiService.loading = true;
-    this.apiService.getData().subscribe(
-      (response) => {
-        this.apiService.task_data = response.data;
-        this.apiService.loading = false;
-      },
-      (error) => {
-        this.apiService.loading = false;
-        this.snackBar.open('An error occurred. Please try again.', 'Close', {
-          duration: 3000,
-          horizontalPosition: 'right',
-          verticalPosition: 'top',
-        });
-        console.error(error);
-      }
-    );
+  private showMessage(message: string) {
+    this.snackBar.open(message, 'Close', {
+      duration: 3000,
+      horizontalPosition: 'right',
+      verticalPosition: 'top',
+    });
   }
 
-  sendData() {
-    this.loading = true;
-    this.apiService
-      .postData('books', {
-        author: this.form.value.title,
-        title: this.form.value.description,
-        publishYear: 2000,
-      })
-      .subscribe(
-        (response) => {
-          console.log('Response from server:', response);
-          this.loading = false;
-          this.dialogRef.close();
-          this.taskAdded.emit();
-          this.snackBar.open('Task added successfully!', 'Close', {
-            duration: 3000,
-            horizontalPosition: 'right',
-            verticalPosition: 'top',
-          });
-          this.getData();
-        },
-        (error) => {
-          this.loading = false;
-          this.snackBar.open('An error occurred. Please try again.', 'Close', {
-            duration: 3000,
-            horizontalPosition: 'right',
-            verticalPosition: 'top',
-          });
-          console.error('Error occurred:', error);
-        }
-      );
+  private handleSuccess(message: string) {
+    this.loading = false;
+    this.dialogRef.close();
+    this.taskChanged.emit();
+    this.showMessage(message);
+    this.apiService.refreshData(); // ApiService ichida getData() umumlashtiriladi
+  }
+
+  private handleError(error: any, message: string) {
+    this.loading = false;
+    this.showMessage(message);
+    console.error('Error:', error);
   }
 
   onSubmit() {
-    if (this.isEditMode) {
-      this.loading = true;
-      this.apiService
-        .putData(`books/${this.data.id}`, {
-          author: this.form.value.title,
-          title: this.form.value.description,
-          publishYear: this.data.publishYear,
-        })
-        .subscribe(
-          (response) => {
-            console.log('Response from server:', response);
-            this.loading = false;
-            this.dialogRef.close();
-            this.taskAdded.emit();
-            this.snackBar.open('Task Edited successfully!', 'Close', {
-              duration: 3000,
-              horizontalPosition: 'right',
-              verticalPosition: 'top',
-            });
-            this.getData();
-          },
-          (error) => {
-            this.loading = false;
-            this.snackBar.open(
-              'An error occurred. Please try again.',
-              'Close',
-              {
-                duration: 3000,
-                horizontalPosition: 'right',
-                verticalPosition: 'top',
-              }
-            );
-            console.error('Error occurred:', error);
-          }
-        );
-    } else {
-      this.sendData();
-    }
+    if (this.form.invalid) return;
+
+    this.loading = true;
+
+    const payload = {
+      author: this.form.value.title,
+      title: this.form.value.description,
+      publishYear: this.isEditMode ? this.data.publishYear : 2000,
+    };
+
+    const request$ = this.isEditMode
+      ? this.apiService.putData(`books/${this.data.id}`, payload)
+      : this.apiService.postData('books', payload);
+
+    request$.subscribe(
+      () =>
+        this.handleSuccess(
+          this.isEditMode ? 'Task updated successfully!' : 'Task added successfully!'
+        ),
+      (err) =>
+        this.handleError(
+          err,
+          this.isEditMode
+            ? 'Error updating task. Please try again.'
+            : 'Error adding task. Please try again.'
+        )
+    );
   }
 }
