@@ -4,17 +4,21 @@
       TODOFY
     </h1>
 
-    <button primary mat-raised-button color="primary" (click)="openFormModal()">
+    <button
+      primary
+      mat-raised-button
+      color="primary"
+      (click)="openFormModal()"
+    >
       Add Task
     </button>
   </div>
+
   <h1 class="text-[30px] text-[#29134e] text-center mt-[10px]">
     Your personal assistant in task planning
   </h1>
-  <div
-    *ngIf="apiService.loading"
-    class="w-full flex justify-center items-center"
-  >
+
+  <div class="w-full flex justify-center items-center" *ngIf="apiService.loading">
     <mat-spinner diameter="50"></mat-spinner>
   </div>
 
@@ -22,14 +26,9 @@
     *ngIf="!apiService.loading"
     class="w-full flex flex-col items-center justify-center"
   >
-    <div
-      *ngIf="!apiService.loading"
-      class="w-full flex flex-col items-center justify-center"
-    >
-      <app-card
-        *ngFor="let task of apiService.task_data"
-        [task]="task"
-      ></app-card>
-    </div>
+    <app-card
+      *ngFor="let task of apiService.task_data"
+      [task]="task"
+    ></app-card>
   </div>
 </div>
