@@ -1,34 +1,30 @@
-<div class="w-full flex flex-col items-center">
-  <div class="w-full flex flex-col items-center justify-center gap-[20px]">
-    <h1 class="text-[30px] text-[#29134e] font-serif underline font-bold">
+<div class="w-full flex flex-col items-center gap-6">
+  <!-- Header -->
+  <div class="flex flex-col items-center gap-5">
+    <h1 class="text-3xl text-[#29134e] font-serif underline font-bold">
       TODOFY
     </h1>
 
-    <button
-      primary
-      mat-raised-button
-      color="primary"
-      (click)="openFormModal()"
-    >
+    <button mat-raised-button color="primary" (click)="openFormModal()">
       Add Task
     </button>
   </div>
 
-  <h1 class="text-[30px] text-[#29134e] text-center mt-[10px]">
+  <!-- Subtitle -->
+  <h2 class="text-2xl text-[#29134e] text-center">
     Your personal assistant in task planning
-  </h1>
+  </h2>
 
-  <div class="w-full flex justify-center items-center" *ngIf="apiService.loading">
+  <!-- Loader -->
+  <div class="flex justify-center items-center" *ngIf="apiService.loading">
     <mat-spinner diameter="50"></mat-spinner>
   </div>
 
+  <!-- Task List -->
   <div
     *ngIf="!apiService.loading"
-    class="w-full flex flex-col items-center justify-center"
+    class="w-full flex flex-col items-center justify-center gap-4"
   >
-    <app-card
-      *ngFor="let task of apiService.task_data"
-      [task]="task"
-    ></app-card>
+    <app-card *ngFor="let task of apiService.task_data" [task]="task"></app-card>
   </div>
 </div>
