@@ -1,0 +1,131 @@
+@use '../../styles/variables' as *;
+
+.shell {
+  width: 100%;
+  max-width: 1120px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.hero {
+  padding: 1.75rem 1.5rem 1.5rem;
+  border-radius: $radius-panel;
+  background: linear-gradient(125deg, #0f172a 0%, #1e3a8a 42%, #0ea5e9 100%);
+  color: #f8fafc;
+  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.35);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::after {
+  content: '';
+  position: absolute;
+  inset: -40% 40% auto -30%;
+  height: 120%;
+  background: radial-gradient(circle, rgba(248, 250, 252, 0.12), transparent 55%);
+  pointer-events: none;
+}
+
+.hero__title {
+  margin: 0;
+  font-family: $font-sans;
+  font-size: clamp(2.1rem, 4vw, 3rem);
+  letter-spacing: -0.04em;
+}
+
+.hero__subtitle {
+  margin: 0.5rem 0 1.1rem;
+  max-width: 48ch;
+  line-height: 1.5;
+  opacity: 0.92;
+  font-size: 0.95rem;
+}
+
+.hero__actions button mat-icon {
+  margin-right: 0.35rem;
+}
+
+.kpi-row {
+  display: flex;
+  justify-content: center;
+}
+
+.kpi {
+  width: 100%;
+  max-width: 420px;
+  padding: 1.1rem 1.25rem;
+  border-radius: $radius-panel;
+  background: $color-surface;
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  box-shadow: $shadow-field;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  text-align: center;
+}
+
+.kpi__label {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: $color-muted;
+}
+
+.kpi__value {
+  font-size: 1.45rem;
+  font-weight: 800;
+  color: $color-ink;
+}
+
+.view-switch {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding: 0.25rem;
+  border-radius: $radius-panel;
+  background: rgba(255, 255, 255, 0.65);
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  box-shadow: $shadow-field;
+}
+
+.view-switch__btn {
+  flex: 1 1 140px;
+  border-radius: $radius-field !important;
+}
+
+.view-switch__btn--active {
+  background: linear-gradient(125deg, #1e3a8a, #0ea5e9) !important;
+  color: #f8fafc !important;
+  border-color: transparent !important;
+}
+
+.view-switch__ico {
+  margin-right: 0.35rem;
+  vertical-align: middle;
+}
+
+.view-panel {
+  padding: 1.25rem 0 0;
+  min-height: 200px;
+}
+
+.view-panel--dark {
+  padding: 1.25rem 0.25rem 0;
+}
+
+.task-stack {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr));
+  gap: 1.25rem;
+  align-items: stretch;
+  width: 100%;
+}
+
+.empty {
+  text-align: center;
+  color: $color-muted;
+  margin: 2rem 0;
+  font-size: 0.95rem;
+}

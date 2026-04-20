@@ -1,0 +1,26 @@
+@use '../../styles/variables' as *;
+
+.charts-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr);
+  gap: 1rem;
+}
+
+@media (max-width: 900px) {
+  .charts-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.chart-panel {
+  min-height: 240px;
+  padding: 0.75rem 0.75rem 0.25rem;
+  border-radius: $radius-panel;
+  background: linear-gradient(145deg, rgba(15, 23, 42, 0.88), rgba(30, 41, 59, 0.68));
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  box-shadow: 0 18px 40px rgba(2, 6, 23, 0.45);
+}
+
+.chart-panel--wide {
+  min-height: 260px;
+}

@@ -1,0 +1,19 @@
+@use 'variables' as *;
+
+.mat-typography,
+.mat-typography .mat-body-1,
+.mat-typography .mat-body-2,
+.mat-mdc-form-field,
+.mat-mdc-form-field .mat-mdc-form-field-infix,
+.mat-mdc-form-field .mat-mdc-floating-label,
+.mat-mdc-form-field .mdc-floating-label,
+.mat-mdc-button .mdc-button__label,
+.mat-mdc-raised-button .mdc-button__label,
+.mat-mdc-outlined-button .mdc-button__label,
+.mat-mdc-tab .mdc-tab__text-label,
+.mat-mdc-dialog-title,
+.mat-mdc-snack-bar-container .mat-mdc-snack-bar-label,
+.mat-mdc-select,
+.mat-mdc-option .mdc-list-item__primary-text {
+  font-family: $font-sans !important;
+}

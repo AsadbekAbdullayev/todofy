@@ -1,0 +1,17 @@
+// Design tokens — global + component SCSS (@use 'styles/variables' as *;)
+$font-sans: 'Montserrat', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+$color-ink: #0c1222;
+$color-muted: #5c6577;
+$color-line: rgba(99, 102, 241, 0.38);
+$color-line-strong: rgba(79, 70, 229, 0.85);
+$color-surface: #ffffff;
+$color-surface-soft: #f4f6fb;
+
+$radius-field: 14px;
+$radius-panel: 18px;
+
+$shadow-field: 0 2px 0 rgba(255, 255, 255, 0.85) inset,
+  0 6px 22px rgba(15, 23, 42, 0.07);
+$shadow-field-focus: 0 0 0 3px rgba(99, 102, 241, 0.22),
+  0 8px 28px rgba(15, 23, 42, 0.1);

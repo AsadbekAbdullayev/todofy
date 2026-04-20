@@ -1,53 +1,64 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { ApiService } from '../api.service';
+import { Store } from '@ngrx/store';
+import {
+  animate,
+  query,
+  stagger,
+  style,
+  transition,
+  trigger,
+} from '@angular/animations';
 import { ModalFormComponent } from '../modal-form/modal-form.component';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { selectAllTasks, selectTasksTotalGrand } from '../store/selectors';
 
 @Component({
   selector: 'app-to-do-app',
   standalone: false,
   templateUrl: './to-do-app.component.html',
-  styleUrl: './to-do-app.component.css',
+  styleUrl: './to-do-app.component.scss',
+  animations: [
+    trigger('listStagger', [
+      transition('* => *', [
+        query(
+          'app-card',
+          [
+            style({ opacity: 0, transform: 'translateY(18px)' }),
+            stagger(
+              52,
+              animate(
+                '400ms cubic-bezier(0.22, 1, 0.36, 1)',
+                style({ opacity: 1, transform: 'none' })
+              )
+            ),
+          ],
+          { optional: true }
+        ),
+      ]),
+    ]),
+  ],
 })
-  
-export class ToDoAppComponent implements OnInit {
-  constructor(
-    private snackBar: MatSnackBar,
-    private dialog: MatDialog,
-    public apiService: ApiService
-  ) {}
-  loading = false;
-  ngOnInit() {
-    this.getData();
+export class ToDoAppComponent {
+  private readonly store = inject(Store);
+  private readonly dialog = inject(MatDialog);
+
+  readonly tasks$ = this.store.select(selectAllTasks);
+  readonly portfolio$ = this.store.select(selectTasksTotalGrand);
+
+  /** Explicit view switching (no mat-tab-group) so no stale tab content. */
+  activeView: 'pipeline' | 'analytics' = 'pipeline';
+
+  selectView(view: 'pipeline' | 'analytics'): void {
+    this.activeView = view;
   }
 
-  getData() {
-    this.apiService.loading = true;
-    this.apiService.getData().subscribe(
-      (response) => {
-        this.apiService.task_data = response.data;
-        this.apiService.loading = false;
-      },
-      (error) => {
-        this.apiService.loading = false;
-        this.snackBar.open('An error occurred. Please try again.', 'Close', {
-          duration: 3000,
-          horizontalPosition: 'right',
-          verticalPosition: 'top',
-        });
-        console.error(error);
-      }
-    );
-  }
-
-  openFormModal() {
-    const dialogRef = this.dialog.open(ModalFormComponent);
-
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        console.log('Form Data:', result);
-      }
+  openFormModal(): void {
+    this.dialog.open(ModalFormComponent, {
+      width: 'min(98vw, 880px)',
+      maxWidth: '98vw',
+      height: 'min(94dvh, 920px)',
+      maxHeight: '96dvh',
+      panelClass: 'todofy-form-panel',
     });
   }
 }

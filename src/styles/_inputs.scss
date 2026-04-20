@@ -1,0 +1,55 @@
+@use 'variables' as v;
+
+@mixin todofy-material-fields {
+  .mat-mdc-form-field-appearance-outline {
+    .mat-mdc-text-field-wrapper {
+      border-radius: v.$radius-field;
+      background: linear-gradient(180deg, v.$color-surface 0%, v.$color-surface-soft 100%);
+      box-shadow: v.$shadow-field;
+    }
+
+    .mdc-notched-outline__leading,
+    .mdc-notched-outline__notch,
+    .mdc-notched-outline__trailing {
+      border-color: v.$color-line !important;
+      border-width: 1.5px !important;
+    }
+
+    &.mat-focused:not(.mat-form-field-invalid) {
+      .mat-mdc-text-field-wrapper {
+        box-shadow: v.$shadow-field-focus;
+      }
+
+      .mdc-notched-outline__leading,
+      .mdc-notched-outline__notch,
+      .mdc-notched-outline__trailing {
+        border-color: v.$color-line-strong !important;
+      }
+    }
+
+    .mat-mdc-form-field-infix {
+      padding-top: 0.65rem;
+      padding-bottom: 0.65rem;
+      min-height: 44px;
+    }
+
+    input.mat-mdc-input-element,
+    textarea.mat-mdc-input-element {
+      font-family: v.$font-sans;
+      letter-spacing: 0.02em;
+      color: v.$color-ink;
+    }
+  }
+
+  .mat-mdc-select {
+    font-family: v.$font-sans;
+  }
+}
+
+.todofy-app {
+  @include todofy-material-fields;
+}
+
+.todofy-form-panel {
+  @include todofy-material-fields;
+}

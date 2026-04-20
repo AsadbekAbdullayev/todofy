@@ -1,0 +1,39 @@
+@use 'sass:string';
+
+// Azure-blue (and other M3 prebuilts) set --mat-sys-* to Roboto on `html`.
+// Our bundle loads after the prebuilt theme, so these override every Material surface.
+$_stack: 'Montserrat, system-ui, -apple-system, "Segoe UI", sans-serif';
+
+html {
+  --mat-sys-body-large-font: #{string.unquote($_stack)};
+  --mat-sys-body-medium-font: #{string.unquote($_stack)};
+  --mat-sys-body-small-font: #{string.unquote($_stack)};
+  --mat-sys-display-large-font: #{string.unquote($_stack)};
+  --mat-sys-display-medium-font: #{string.unquote($_stack)};
+  --mat-sys-display-small-font: #{string.unquote($_stack)};
+  --mat-sys-headline-large-font: #{string.unquote($_stack)};
+  --mat-sys-headline-medium-font: #{string.unquote($_stack)};
+  --mat-sys-headline-small-font: #{string.unquote($_stack)};
+  --mat-sys-label-large-font: #{string.unquote($_stack)};
+  --mat-sys-label-medium-font: #{string.unquote($_stack)};
+  --mat-sys-label-small-font: #{string.unquote($_stack)};
+  --mat-sys-title-large-font: #{string.unquote($_stack)};
+  --mat-sys-title-medium-font: #{string.unquote($_stack)};
+  --mat-sys-title-small-font: #{string.unquote($_stack)};
+
+  --mat-sys-body-large: #{string.unquote('400 1rem / 1.5rem ' + $_stack)};
+  --mat-sys-body-medium: #{string.unquote('400 0.875rem / 1.25rem ' + $_stack)};
+  --mat-sys-body-small: #{string.unquote('400 0.75rem / 1rem ' + $_stack)};
+  --mat-sys-display-large: #{string.unquote('400 3.562rem / 4rem ' + $_stack)};
+  --mat-sys-display-medium: #{string.unquote('400 2.812rem / 3.25rem ' + $_stack)};
+  --mat-sys-display-small: #{string.unquote('400 2.25rem / 2.75rem ' + $_stack)};
+  --mat-sys-headline-large: #{string.unquote('400 2rem / 2.5rem ' + $_stack)};
+  --mat-sys-headline-medium: #{string.unquote('400 1.75rem / 2.25rem ' + $_stack)};
+  --mat-sys-headline-small: #{string.unquote('400 1.5rem / 2rem ' + $_stack)};
+  --mat-sys-label-large: #{string.unquote('500 0.875rem / 1.25rem ' + $_stack)};
+  --mat-sys-label-medium: #{string.unquote('500 0.75rem / 1rem ' + $_stack)};
+  --mat-sys-label-small: #{string.unquote('500 0.688rem / 1rem ' + $_stack)};
+  --mat-sys-title-large: #{string.unquote('400 1.375rem / 1.75rem ' + $_stack)};
+  --mat-sys-title-medium: #{string.unquote('500 1rem / 1.5rem ' + $_stack)};
+  --mat-sys-title-small: #{string.unquote('500 0.875rem / 1.25rem ' + $_stack)};
+}

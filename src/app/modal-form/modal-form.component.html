@@ -1,28 +1,254 @@
-<h1 mat-dialog-title>{{ isEditMode ? "Edit Task" : "Add Task" }}</h1>
+<div class="ws">
+  <header class="ws__hero">
+    <div class="ws__hero-icon" aria-hidden="true">
+      <mat-icon>bolt</mat-icon>
+    </div>
+    <div class="ws__hero-text">
+      <p class="ws__eyebrow">{{ isEditMode ? "Update" : "Create" }}</p>
+      <h2 class="ws__title" mat-dialog-title>
+        {{ isEditMode ? "Edit workstream" : "New workstream" }}
+      </h2>
+      <p class="ws__lede">Set scope, team, priority, dates, then budgets and costs.</p>
+    </div>
+  </header>
 
-<div mat-dialog-content>
-  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="w-[380px] flex flex-col">
-    <mat-form-field appearance="fill">
-      <mat-label>Title</mat-label>
-      <input matInput formControlName="title" />
-    </mat-form-field>
+  <div class="ws__scroll" mat-dialog-content>
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="ws__form" novalidate>
+      <section class="ws-card" aria-labelledby="ws-sec-story">
+        <div class="ws-card__top">
+          <span class="ws-badge" id="ws-sec-story">01</span>
+          <div>
+            <h3 class="ws-card__title">Story &amp; ownership</h3>
+            <p class="ws-card__hint">What it is, who owns it, and when it is due.</p>
+          </div>
+        </div>
 
-    <mat-form-field appearance="fill">
-      <mat-label>Description</mat-label>
-      <textarea matInput formControlName="description"></textarea>
-    </mat-form-field>
-  </form>
-</div>
+        <div class="ws-field ws-field--full">
+          <label class="ws-label" for="ws-title">Title</label>
+          <input
+            id="ws-title"
+            class="ws-control"
+            type="text"
+            formControlName="title"
+            maxlength="200"
+            autocomplete="off"
+            placeholder="e.g. Q3 reliability program"
+          />
+          <p class="ws-error" *ngIf="invalidTouched('title')">Title is required.</p>
+        </div>
 
-<div mat-dialog-actions>
-  <button mat-button mat-dialog-close>Cancel</button>
-  <button
-    mat-button
-    (click)="onSubmit()"
-    [disabled]="form.invalid || loading"
-    class="loading-button"
-  >
-    <mat-spinner *ngIf="loading" diameter="20" class="spinner"></mat-spinner>
-    <span *ngIf="!loading">{{ isEditMode ? "Save" : "Add" }}</span>
-  </button>
+        <div class="ws-field ws-field--full">
+          <label class="ws-label" for="ws-desc">Description</label>
+          <textarea
+            id="ws-desc"
+            class="ws-control ws-control--textarea"
+            rows="3"
+            formControlName="description"
+            maxlength="4000"
+            placeholder="Scope, success criteria, stakeholders…"
+          ></textarea>
+          <p class="ws-error" *ngIf="invalidTouched('description')">Description is required.</p>
+        </div>
+
+        <div class="ws-grid2">
+          <div class="ws-field ws-field--flush">
+            <span class="ws-label" id="ws-lab-dept">Department</span>
+            <div class="ws-select-wrap">
+              <select
+                class="ws-control ws-control--select"
+                formControlName="department"
+                aria-labelledby="ws-lab-dept"
+              >
+                <option *ngFor="let d of departments" [value]="d">{{ d }}</option>
+              </select>
+              <mat-icon class="ws-select-chev" aria-hidden="true">expand_more</mat-icon>
+            </div>
+          </div>
+          <div class="ws-field ws-field--flush">
+            <label class="ws-label" for="ws-due">Due date</label>
+            <input id="ws-due" class="ws-control" type="date" formControlName="dueDate" />
+          </div>
+        </div>
+
+        <div class="ws-grid2">
+          <div class="ws-field ws-field--flush">
+            <span class="ws-label" id="ws-lab-prio">Priority</span>
+            <div class="ws-seg" role="group" aria-labelledby="ws-lab-prio">
+              <button
+                type="button"
+                class="ws-seg__btn"
+                *ngFor="let p of priorities"
+                [class.ws-seg__btn--on]="form.get('priority')?.value === p"
+                (click)="setPriority(p)"
+              >
+                {{ p | titlecase }}
+              </button>
+            </div>
+          </div>
+          <div class="ws-field ws-field--flush">
+            <span class="ws-label" id="ws-lab-st">Status</span>
+            <div class="ws-seg" role="group" aria-labelledby="ws-lab-st">
+              <button
+                type="button"
+                class="ws-seg__btn"
+                *ngFor="let s of statuses"
+                [class.ws-seg__btn--on]="form.get('status')?.value === s"
+                (click)="setStatus(s)"
+              >
+                {{ s === "in_progress" ? "In progress" : (s | titlecase) }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="ws-card ws-card--inverse" aria-labelledby="ws-sec-money">
+        <div class="ws-card__top">
+          <span class="ws-badge ws-badge--light" id="ws-sec-money">02</span>
+          <div>
+            <h3 class="ws-card__title">Money &amp; time</h3>
+            <p class="ws-card__hint ws-card__hint--muted">Billable rate, hours, tax, and bonus.</p>
+          </div>
+        </div>
+
+        <div class="ws-metrics">
+          <div class="ws-field">
+            <label class="ws-label ws-label--light" for="ws-rate">Billable rate (UZS / h)</label>
+            <input
+              id="ws-rate"
+              class="ws-control ws-control--inverse"
+              type="number"
+              formControlName="billableRate"
+              min="0"
+              step="1"
+            />
+            <p class="ws-error ws-error--light" *ngIf="invalidTouched('billableRate')">
+              Enter a valid rate.
+            </p>
+          </div>
+          <div class="ws-field">
+            <label class="ws-label ws-label--light" for="ws-hrs">Estimated hours</label>
+            <input
+              id="ws-hrs"
+              class="ws-control ws-control--inverse"
+              type="number"
+              formControlName="estimatedHours"
+              min="0.25"
+              max="2000"
+              step="0.25"
+            />
+            <p class="ws-error ws-error--light" *ngIf="invalidTouched('estimatedHours')">
+              Between 0.25 and 2000 hours.
+            </p>
+          </div>
+          <div class="ws-field">
+            <label class="ws-label ws-label--light" for="ws-tax">Tax (%)</label>
+            <input
+              id="ws-tax"
+              class="ws-control ws-control--inverse"
+              type="number"
+              formControlName="taxPercent"
+              min="0"
+              max="100"
+              step="0.5"
+            />
+          </div>
+          <div class="ws-field">
+            <label class="ws-label ws-label--light" for="ws-bonus">Bonus (UZS)</label>
+            <input
+              id="ws-bonus"
+              class="ws-control ws-control--inverse"
+              type="number"
+              formControlName="bonus"
+              min="0"
+              step="1"
+            />
+          </div>
+        </div>
+      </section>
+
+      <section class="ws-card" aria-labelledby="ws-sec-exp">
+        <div class="ws-card__top">
+          <span class="ws-badge" id="ws-sec-exp">03</span>
+          <div class="ws-card__top-grow">
+            <h3 class="ws-card__title">Extra cost lines</h3>
+            <p class="ws-card__hint">Optional rows — vendors, tools, travel.</p>
+          </div>
+          <button type="button" class="ws-addline" (click)="addExpenseRow()">
+            <mat-icon>add</mat-icon>
+            Add line
+          </button>
+        </div>
+
+        <div class="ws-table">
+          <div class="ws-table__head" aria-hidden="true">
+            <span>#</span>
+            <span>Label</span>
+            <span>Amount (UZS)</span>
+            <span></span>
+          </div>
+          <div formArrayName="expenses">
+          <div
+            *ngFor="let row of expenses.controls; let i = index"
+            class="ws-table__row"
+            [formGroupName]="i"
+          >
+            <span class="ws-table__idx">{{ i + 1 }}</span>
+            <input
+              class="ws-control ws-control--table"
+              type="text"
+              formControlName="label"
+              placeholder="Line item"
+            />
+            <input
+              class="ws-control ws-control--table"
+              type="number"
+              formControlName="amount"
+              min="0"
+              step="1"
+              placeholder="0"
+            />
+            <button
+              type="button"
+              class="ws-rm"
+              (click)="removeExpenseRow(i)"
+              [disabled]="expenses.length === 1"
+              matTooltip="Remove row"
+              aria-label="Remove row"
+            >
+              <mat-icon>close</mat-icon>
+            </button>
+          </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="ws-live" *ngIf="form.valid" aria-live="polite">
+        <h3 class="ws-live__title">Live preview</h3>
+        <ul class="ws-live__grid">
+          <li><span class="ws-live__k">Labor</span><span class="ws-live__v">{{ previewTotals().labor | sumUzs }}</span></li>
+          <li><span class="ws-live__k">Expenses</span><span class="ws-live__v">{{ previewTotals().expenseTotal | sumUzs }}</span></li>
+          <li><span class="ws-live__k">Subtotal</span><span class="ws-live__v">{{ previewTotals().subtotal | sumUzs }}</span></li>
+          <li><span class="ws-live__k">Tax</span><span class="ws-live__v">{{ previewTotals().tax | sumUzs }}</span></li>
+          <li class="ws-live__grand">
+            <span class="ws-live__k">Grand total</span><span class="ws-live__v">{{ previewTotals().grand | sumUzs }}</span>
+          </li>
+        </ul>
+      </section>
+    </form>
+  </div>
+
+  <footer class="ws__footer" mat-dialog-actions align="end">
+    <button type="button" class="ws-btn ws-btn--ghost" mat-dialog-close>Cancel</button>
+    <button
+      type="button"
+      class="ws-btn ws-btn--primary"
+      mat-flat-button
+      color="primary"
+      (click)="onSubmit()"
+      [disabled]="form.invalid"
+    >
+      {{ isEditMode ? "Save changes" : "Create workstream" }}
+    </button>
+  </footer>
 </div>

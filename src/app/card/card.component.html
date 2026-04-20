@@ -1,25 +1,36 @@
-<div class="custom-card">
-  <div class="card-content">
-    <h2 class="card-title">      
-      {{
-        task.author ||
-          "Lorem ipsum dolor sit amet consectetur adipisicing elit. Minima recusandae enim vitae eveniet voluptatum eligendi animi."
-      }}
-    </h2>
-    <p class="card-description">
-      {{
-        task.title ||
-          " Mollitia consectetur architecto quod nam. Ducimus autem quaerat veritatis sequi, cumque adipisci officia earum tenetur magnam vel quod temporibus consequuntur ipsa rerum et repellendus totam dolore sed voluptate qui consectetur, aut assumenda. Officia neque hic tempore dolorem nostrum reiciendis cupiditate error velit sit architecto id dolorum at totam sunt animi saepe assumenda, facilis esse deleniti impedit pariatur perferendis quibusdam. Eaque dicta illum a sequi praesentium exercitationem expedita maiores aperiam ad accusamus, dolores harum odio numquam natus, optio rerum cupiditate qui, modi illo quis pariatur."
-      }}
-    </p>
+<article class="task-card">
+  <div class="task-card__main">
+    <div class="task-card__chips">
+      <span class="chip" [class.chip--high]="task.priority === 'high'" [class.chip--med]="task.priority === 'medium'" [class.chip--low]="task.priority === 'low'">
+        {{ task.priority | titlecase }}
+      </span>
+      <span class="chip chip--ghost">{{ task.department }}</span>
+      <span class="chip chip--ghost">{{ task.status | titlecase }}</span>
+    </div>
+    <h2 class="task-card__title">{{ task.title }}</h2>
+    <p class="task-card__desc">{{ task.description }}</p>
+    <dl class="task-metrics">
+      <div>
+        <dt>Rate × hours</dt>
+        <dd>{{ task.billableRate | sumUzs }} × {{ task.estimatedHours }}h</dd>
+      </div>
+      <div>
+        <dt>Expense lines</dt>
+        <dd>{{ task.expenses.length }}</dd>
+      </div>
+      <div>
+        <dt>Grand total</dt>
+        <dd class="grand">{{ totals().grand | sumUzs }}</dd>
+      </div>
+    </dl>
   </div>
-  <div class="card-actions">
-    <button mat-icon-button color="primary" (click)="onEdit(task)">
+  <footer class="task-card__actions">
+    <button mat-stroked-button color="primary" type="button" (click)="onEdit()">
       <mat-icon>edit</mat-icon>
+      Refine
     </button>
-    <button mat-icon-button color="warn" (click)="onDelete(task._id)">
-      <mat-spinner *ngIf="loading" diameter="20" class="spinner"></mat-spinner>
-      <mat-icon *ngIf="!loading">delete</mat-icon>
+    <button mat-icon-button color="warn" type="button" (click)="onDelete()" aria-label="Delete">
+      <mat-icon>delete</mat-icon>
     </button>
-  </div>
-</div>
+  </footer>
+</article>
